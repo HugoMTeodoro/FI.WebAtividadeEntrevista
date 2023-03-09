@@ -193,14 +193,13 @@ function povoarLista() {
                     <button id="ExcluirBeneficiario${i}" type="button" class="btn btn-sm btn-danger form-control" style="margin-top:5px" onclick="ExcluirBeneficiario('${i}')">Excluir</button>
                 </div>
             </div>
-        </div>
-    `;
+        </div> `;
 
             // adiciona o novo conjunto de campos ao formulário
             $('#BeneficiariosGrid').append(novoCampo);
         }
     }
-}
+
 function editarBeneficiario(index) {
     var textoDoBotao = $("#AlterarBeneficiario" + index).text();
     if (textoDoBotao != "OK!") {
