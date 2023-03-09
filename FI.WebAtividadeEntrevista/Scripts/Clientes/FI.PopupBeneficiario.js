@@ -1,4 +1,5 @@
 ﻿var beneficiarios = [];
+var firsttime = 1;
 $(document).ready(function () {
     quantItens = $("#QuantidadeBeneficiarios").val()
     $('.CPF').inputmask("999.999.999-99");
@@ -80,39 +81,16 @@ function AdicionarBeneficiario() {
 }
 function EditarBeneficiarioServidor(index) {
 
-
     let cpf = $("#CPFBeneficiario"+index).val();
     let nome = $("#NomeBeneficiario"+index).val();
-    var novoCampo = `<div id="Beneficiario${quantItens}" class="grid-item" style="background-color: #F5F5F5;">
-    <div class="col-md-4 mx-auto">
-        <div class="form-group">
-            <input class="form-control GridCPFBeneficiario CPF" required="required" type="text" id="CPFBeneficiario${quantItens}" name="CPFBeneficiario${quantItens}" placeholder="Ex.: 010.011.111-00" style="border: none; background-color: #F5F5F5; color: black; margin-top: 5px " value="${cpf}" disabled>
-        </div>
-    </div>
-    <div class="col-md-4  mx-auto">
-        <div class="form-group">
-            <input required="required" type="text" class="form-control GridNomeBeneficiario" id="NomeBeneficiario${quantItens}" name="NomeBeneficiario${quantItens}" placeholder="Ex.: João da Silva" maxlength="50" style="border: none; background-color: #F5F5F5; color: black;margin-top:5px" value="${nome}" disabled>
-        </div>
-    </div>
-    <div class="col-md-2  mx-auto">
-        <div class="form-group">
-            <button id="AlterarBeneficiario${quantItens}" type="button" class="btn btn-sm btn-primary form-control" style="margin-top:5px" onclick="editarBeneficiario('${quantItens}')">Alterar</button>
-        </div>
-    </div>
-    <div class="col-md-2 mx-auto">
-        <div class="form-group">
-            <button id="ExcluirBeneficiario${quantItens}" type="button" class="btn btn-sm btn-danger form-control" style="margin-top:5px" onclick="ExcluirBeneficiario('${quantItens}')" >Excluir</button>
-        </div>
-    </div>
-</div>`;
-
+    var beneficiario = { CPF: cpf, Nome: cpf };
     var beneficiarios = [];
     // Percorra todos os elementos de CPF e nome e adicione-os a um objeto BeneficiarioModel
     $('.GridCPFBeneficiario').each(function (index, element) {
         var cpfrequest = $(element).val();
         cpfrequest = cpfrequest.replace(/\D/g, '');
         var nome = $(`.GridNomeBeneficiario:eq(${index})`).val();
-        var beneficiario = { CPF: cpfrequest, Nome: nome };
+        var beneficiario = { CPF: cpf, Nome: nome };
         beneficiarios.push(beneficiario);
     });
 
@@ -122,7 +100,7 @@ function EditarBeneficiarioServidor(index) {
         data: {
             model: {
                 "Nome": nome,
-                "CPF": $("#CPFBeneficiario").inputmask("unmaskedvalue")
+                "CPF": $("#CPFBeneficiario"+index).inputmask("unmaskedvalue")
             },
             "Beneficiarios": beneficiarios
         },
@@ -135,9 +113,8 @@ function EditarBeneficiarioServidor(index) {
             },
         success:
             function (r) {
-                editarBeneficiario(index);
                 ModalDialog("Sucesso!", r)
-                povoarListaBeneficiarios();
+
             }
     });
 
@@ -207,15 +184,16 @@ function editarBeneficiario(index) {
         $("#NomeBeneficiario" + index).css("background-color", "white");
         $("#CPFBeneficiario" + index).removeAttr("disabled");
         $("#NomeBeneficiario" + index).removeAttr("disabled");
-        $("#AlterarBeneficiario" + index).off();
-        $("#AlterarBeneficiario" + index).removeClass("btn-primary").addClass("btn-success").html("OK!").click(EditarBeneficiarioServidor(index)).append('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
+        firsttime = 1;
+        $("#AlterarBeneficiario" + index).removeClass("btn-primary").addClass("btn-success").html("OK!").append('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
     } else {
         $("#CPFBeneficiario" + index).css("background-color", "#F5F5F5");
         $("#NomeBeneficiario" + index).css("background-color", "#F5F5F5");
         $("#CPFBeneficiario" + index).prop("disabled", true);
         $("#NomeBeneficiario" + index).prop("disabled", true);
         $("#AlterarBeneficiario" + index).off();
-        $("#AlterarBeneficiario" + index).removeClass("btn-succes").addClass("btn-primary").html("Alterar").click(editarBeneficiario(index)).find(".glyphicon-ok").remove();;
+        EditarBeneficiarioServidor(index);
+        $("#AlterarBeneficiario" + index).removeClass("btn-success").addClass("btn-primary").html("Alterar").find(".glyphicon-ok").remove().on('click', EditarBeneficiarioServidor(index));
     }
     
 }
