@@ -114,7 +114,9 @@ function EditarBeneficiarioServidor(index) {
         success:
             function (r) {
                 ModalDialog("Sucesso!", r)
-
+                $('#CPFBeneficiario').val(cpf);
+                $('#NomeBeneficiario').val(nome);
+                povoarListaBeneficiarios();
             }
     });
 
