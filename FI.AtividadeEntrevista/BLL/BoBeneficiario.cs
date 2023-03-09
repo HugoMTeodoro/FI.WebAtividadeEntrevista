@@ -45,7 +45,7 @@ namespace FI.AtividadeEntrevista.BLL
         /// <param name="cliente">Objeto de cliente</param>
         public bool VerificarInconsistencia(DML.Beneficiario beneficiario, List<DML.Beneficiario> beneficiarios)
         {
-            if (beneficiarios.Where(x => x.CPF == beneficiario.CPF).Count() > 0)
+            if (beneficiarios.Where(x => x.CPF == beneficiario.CPF).Count() > 1)
             {
                 return true;
             }
