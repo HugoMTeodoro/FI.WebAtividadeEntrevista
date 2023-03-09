@@ -160,9 +160,10 @@ function povoarListaBeneficiarios() {
     $("#ConteudoPopup").val(objeto_serializado);
 }
 function povoarLista() {
-    let conteudo = $("#ConteudoPopup").val();
-    if (conteudo != "0") {
-        var obj = JSON.parse(conteudo);
+    var jsonObj = JSON.parse($("#ConteudoPopup").val());
+    if (jsonObj == '0') {
+        jsonObj = null;
+    }
         for (var i = 0; i < obj.length; i++) {
             quantItens++;
             var benef = obj[i];
