@@ -50,7 +50,10 @@ function ModalDialog(titulo, texto) {
     $('#' + random).modal('show');
 }
 function submitManual() {
-    var jsonObj;
+    var jsonObj = JSON.parse($("#ConteudoPopup").val());
+    if (jsonObj == '0') {
+        jsonObj = null;
+    }
     var Obj = $("#ConteudoPopup").val();
     if (typeof Obj === 'undefined' || Obj === null || Obj == null || Obj.length == 0) {
         jsonObj = null;
