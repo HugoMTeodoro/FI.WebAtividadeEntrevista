@@ -120,19 +120,20 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiario
             List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
 
             parametros.Add(new System.Data.SqlClient.SqlParameter("NOME", beneficiario.Nome));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("ID", beneficiario.Id));
             parametros.Add(new System.Data.SqlClient.SqlParameter("CPF", beneficiario.CPF));
+            parametros.Add(new System.Data.SqlClient.SqlParameter("ID", beneficiario.IDCLIENTE));
 
-            if(ConsultarExistenciaParaCliente(beneficiario.Id, beneficiario.CPF) != null)
+            if(ConsultarExistenciaParaCliente(beneficiario.IDCLIENTE, beneficiario.CPF) == null)
             {
+                
                 Incluir(beneficiario);
             }
             else
             {
-                base.Executar("FI_SP_AltBeneficiario", parametros);
+                base.Executar("FI_SP_AltBenef", parametros);
             }
-
             
+
         }
 
 

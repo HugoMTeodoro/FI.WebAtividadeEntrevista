@@ -69,6 +69,15 @@ namespace WebAtividadeEntrevista.Controllers
             BoCliente bo = new BoCliente();
             BoBeneficiario boBen = new BoBeneficiario();
             bool haRepeticoes = false;
+            List<Beneficiario> beneficiariosBd = boBen.Consultar(model.Id);
+            foreach (Beneficiario b in beneficiariosBd)
+            {
+                BeneficiarioModel benefFront = model.Beneficiarios.Where(x=> x.CPF==b.CPF && x.IDCLIENTE== model.Id).FirstOrDefault();
+                if (benefFront == null)
+                {
+                    boBen.Excluir(b.Id);
+                }
+            }
             if (model.Beneficiarios != null)
                 haRepeticoes = model.Beneficiarios.GroupBy(p => p.CPF).Any(g => g.Count() > 1);
             if (haRepeticoes)
