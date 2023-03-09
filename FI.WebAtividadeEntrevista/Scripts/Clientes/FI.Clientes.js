@@ -1,46 +1,53 @@
 ﻿
 $(document).ready(function () {
-
     //Adição de máscara para o CPF
     $(document).ready(function () {
         $('#CPF').inputmask("999.999.999-99");
     });
+    
 
-    $('#formCadastro').submit(function (e) {
-
-        e.preventDefault();
+})
+function submitManual() {
+    var jsonObj;
+    var Obj = $("#ConteudoPopup").val();
+    if (typeof Obj === 'undefined' || Obj === null || Obj == null || Obj.length ==0) {
+        jsonObj = null;
+    } else {
+        jsonObj = JSON.parse(Obj);
+    }
+    
+        var cliente = {
+            Nome: $("#Nome").val(),
+            Sobrenome: $("#Sobrenome").val(),
+            Email: $("#Email").val(),
+            CEP: $("#CEP").val(),
+            CPF: $("#CPF").inputmask("unmaskedvalue"),
+            Nacionalidade: $("#Nacionalidade").val(),
+            Estado: $("#Estado").val(),
+            Cidade: $("#Cidade").val(),
+            Logradouro: $("#Logradouro").val(),
+            Telefone: $("#Telefone").val(),
+            Beneficiarios: jsonObj
+        };
         $.ajax({
             url: urlPost,
             method: "POST",
-            data: {
-                "NOME": $(this).find("#Nome").val(),
-                "CEP": $(this).find("#CEP").val(),
-                "Email": $(this).find("#Email").val(),
-                "Sobrenome": $(this).find("#Sobrenome").val(),
-                "Nacionalidade": $(this).find("#Nacionalidade").val(),
-                "Estado": $(this).find("#Estado").val(),
-                "Cidade": $(this).find("#Cidade").val(),
-                "Logradouro": $(this).find("#Logradouro").val(),
-                "Telefone": $(this).find("#Telefone").val(),
-                "CPF": $(this).find("#CPF").inputmask("unmaskedvalue")
-            },
-            error:
-            function (r) {
+            data: JSON.stringify(cliente),
+            contentType: "application/json",
+            error: function (r) {
                 if (r.status == 400)
                     ModalDialog("Ocorreu um erro", r.responseJSON);
                 else if (r.status == 500)
                     ModalDialog("Ocorreu um erro", "Ocorreu um erro interno no servidor.");
             },
-            success:
-            function (r) {
+            success: function (r) {
                 ModalDialog("Sucesso!", r)
+
                 $("#formCadastro")[0].reset();
             }
         });
-    })
     
-})
-
+}
 function ModalDialog(titulo, texto) {
     var random = Math.random().toString().replace('.', '');
     var texto = '<div id="' + random + '" class="modal fade">                                                               ' +
@@ -64,3 +71,6 @@ function ModalDialog(titulo, texto) {
     $('body').append(texto);
     $('#' + random).modal('show');
 }
+
+
+    

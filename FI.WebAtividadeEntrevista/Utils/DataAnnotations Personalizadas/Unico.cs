@@ -14,6 +14,8 @@ namespace WebAtividadeEntrevista.Utils.DataAnnotations_Personalizadas
         {
             try
             {
+                if (value == null)
+                    return new ValidationResult(ConstantesMensagensCPFValido.s_preenchaCPF);
                 string cpf = value.ToString();
                 BoCliente bo = new BoCliente();
                 bool existe = bo.VerificarExistencia(cpf);

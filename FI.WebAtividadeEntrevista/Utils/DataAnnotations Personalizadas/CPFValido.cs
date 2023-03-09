@@ -10,6 +10,10 @@ public class CPFValido : ValidationAttribute
     {
         try
         {
+            if (value == null)
+            {
+                return new ValidationResult(ConstantesMensagensCPFValido.s_preenchaCPF);
+            }
             string cpf = value.ToString();
 
             if (string.IsNullOrWhiteSpace(cpf))

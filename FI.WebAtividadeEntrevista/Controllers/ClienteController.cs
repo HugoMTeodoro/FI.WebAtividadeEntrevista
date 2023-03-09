@@ -23,10 +23,11 @@ namespace WebAtividadeEntrevista.Controllers
         }
 
         [HttpPost]
-        public JsonResult Incluir(ClienteModel model)
+        public JsonResult Incluir(ClienteCreateEdit model)
         {
             BoCliente bo = new BoCliente();
-            
+            BoBeneficiario boBen = new BoBeneficiario();
+
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -38,9 +39,9 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
-                
+
                 model.Id = bo.Incluir(new Cliente()
-                {                    
+                {
                     CEP = model.CEP,
                     Cidade = model.Cidade,
                     Email = model.Email,
@@ -53,16 +54,27 @@ namespace WebAtividadeEntrevista.Controllers
                     CPF = model.CPF
                 });
 
-           
+                foreach (BeneficiarioModel ben in model.Beneficiarios)
+                {
+                    boBen.Incluir(new Beneficiario { CPF = ben.CPF, IDCLIENTE = model.Id, Nome = ben.Nome });
+                }
+
                 return Json("Cadastro efetuado com sucesso");
             }
         }
 
         [HttpPost]
-        public JsonResult Alterar(ClienteModel model)
+        public JsonResult Alterar(ClienteModelEdit model)
         {
             BoCliente bo = new BoCliente();
-       
+            BoBeneficiario boBen = new BoBeneficiario();
+            bool haRepeticoes = false;
+            if (model.Beneficiarios != null)
+                haRepeticoes = model.Beneficiarios.GroupBy(p => p.CPF).Any(g => g.Count() > 1);
+            if (haRepeticoes)
+            {
+                ModelState.AddModelError("Beneficiário", ConstantesMensagensBeneficiario.s_BeneficiarioDuplicado);
+            }
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -88,21 +100,42 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = model.Telefone,
                     CPF = model.CPF
                 });
-                               
+                if (model.Beneficiarios != null)
+                {
+                    foreach (BeneficiarioModel ben in model.Beneficiarios)
+                    {
+
+                        boBen.Alterar(new Beneficiario { CPF = ben.CPF, IDCLIENTE = model.Id, Nome = ben.Nome });
+                    }
+                }
+                
                 return Json("Cadastro alterado com sucesso");
             }
         }
+        public List<BeneficiarioModel> ConverterModel(List<Beneficiario> model)
+        {
+            List<BeneficiarioModel> beneficiarios = new List<BeneficiarioModel>();
+            foreach (Beneficiario beneficiario in model)
+            {
+                BeneficiarioModel ben = new BeneficiarioModel { CPF = beneficiario.CPF, Id = beneficiario.Id, IDCLIENTE = beneficiario.IDCLIENTE, Nome = beneficiario.Nome };
+                beneficiarios.Add(ben);
+            }
+            return beneficiarios;
+        }
+
 
         [HttpGet]
         public ActionResult Alterar(long id)
         {
             BoCliente bo = new BoCliente();
+            BoBeneficiario boBeneficiario = new BoBeneficiario();
             Cliente cliente = bo.Consultar(id);
+            List<Beneficiario> beneficiarios = boBeneficiario.Consultar(cliente.Id);
             Models.ClienteModel model = null;
 
             if (cliente != null)
             {
-                model = new ClienteModel()
+                model = new ClienteModelEdit()
                 {
                     Id = cliente.Id,
                     CEP = cliente.CEP,
@@ -114,13 +147,19 @@ namespace WebAtividadeEntrevista.Controllers
                     Nome = cliente.Nome,
                     Sobrenome = cliente.Sobrenome,
                     Telefone = cliente.Telefone,
-                    CPF = cliente.CPF
+                    CPF = cliente.CPF,
+                    Beneficiarios = ConverterModel(beneficiarios)
                 };
 
-            
+
             }
 
             return View(model);
+        }
+        [HttpGet]
+        public ActionResult BeneficiariosPopup()
+        {
+            return View();
         }
 
         [HttpPost]

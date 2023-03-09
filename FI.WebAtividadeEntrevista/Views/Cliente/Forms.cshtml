@@ -1,5 +1,6 @@
 ﻿
 <form id="formCadastro" method="post">
+    <input type="hidden" name="ConteudoPopup" id="ConteudoPopup" />
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
@@ -85,18 +86,18 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="pull-left">
-                <button type="button" class="btn">Beneficiários</button>
+                <button id="btnPopupBeneficiarios" name="btnPopupBeneficiarios" style="border: 1px solid;" type="button" class="btn" data-toggle="modal" data-target=".popupBeneficiarios">Beneficiários</button>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="pull-right">
-                <button type="submit" class="btn btn-sm btn-success">Salvar</button>
+                <button type="button" onclick="submitManual()" class="btn btn-sm btn-success">Salvar</button>
                 @Html.ActionLink("Voltar", "Index", "Cliente", new { }, new { @class = "btn btn-sm btn-danger" })
             </div>
         </div>
     </div>
-
+    <div class="modal fade popupBeneficiarios"> @Html.Partial("BeneficiariosPopup") </div>
 
 </form>

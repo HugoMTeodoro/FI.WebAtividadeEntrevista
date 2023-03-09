@@ -1,0 +1,74 @@
+﻿@section scripts{
+    @Scripts.Render("~/bundles/clientes")
+    @Scripts.Render("~/bundles/utils")
+
+}
+
+<input type="hidden" name="QuantidadeBeneficiarios" id="QuantidadeBeneficiarios" value="" />
+<div class="modal-dialog" id="meupopup">
+    <div class="modal-content">
+        <div class="modal-header">
+
+            <button data-dismiss="modal" class="close"><span>&times;</span></button>
+            <div class="modal-title">Beneficiários</div>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label for="CPFBeneficiario">CPF:</label>
+                        <input type="text" class="form-control CPF" id="CPFBeneficiario" name="CPFBeneficiario" placeholder="Ex.: 010.011.111-00">
+                    </div>
+                </div>
+                <form id="formBeneficiarios" method="post">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="NomeBeneficiario">Nome:</label>
+                            <input type="text" class="form-control" id="NomeBeneficiario" name="NomeBeneficiario" placeholder="Ex.: João da Silva" maxlength="50">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label style=" visibility:hidden"> Incluir</label>
+                            <button id="Incluir" type="button" class="btn btn-sm btn-success" onclick="AdicionarBeneficiario()">Incluir</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            
+
+            <!--Beneficiarios Cadastrados-->
+
+
+            <div id="BeneficiariosGrid" class="grid-container" style="display: inline-grid; ">
+                <div class="grid-item">
+                    <div class="col-md-4 mx-auto">
+                        <div class="form-group">
+                            <label for="CPFBeneficiario" style="margin-left: 10px">CPF</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mx-auto">
+                        <div class="form-group">
+                            <label for="NomeBeneficiario" style="margin-left: 13px">Nome</label>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default" data-dismiss="modal">Fechar</button>
+        </div>
+    </div>
+</div>
+
+

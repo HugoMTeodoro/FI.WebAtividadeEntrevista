@@ -68,6 +68,24 @@ namespace WebAtividadeEntrevista.Models
         /// </summary>
         public string Telefone { get; set; }
 
+        
+        /// <summary>
+        /// Beneficiarios
+        /// </summary>
+        public List<BeneficiarioModel> Beneficiarios { get; set; }
+
+    }
+    public class ClienteModelEdit : ClienteModel
+    {
+        /// <summary>
+        /// CPF
+        /// </summary>
+        [Required]
+        [CPFValido]
+        public string CPF { get; set; }
+    }
+    public class ClienteCreateEdit : ClienteModel
+    {
         /// <summary>
         /// CPF
         /// </summary>
@@ -75,6 +93,5 @@ namespace WebAtividadeEntrevista.Models
         [Unico]
         [CPFValido]
         public string CPF { get; set; }
-
-    }    
+    }
 }
