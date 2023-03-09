@@ -8,7 +8,10 @@ $(document).ready(function () {
 
 })
 function submitManual() {
-        var jsonObj = JSON.parse($("#ConteudoPopup").val());
+    var jsonObj = JSON.parse($("#ConteudoPopup").val());
+    if (jsonObj == '0') {
+        jsonObj = null;
+    }
         var cliente = {
             Nome: $("#Nome").val(),
             Sobrenome: $("#Sobrenome").val(),
