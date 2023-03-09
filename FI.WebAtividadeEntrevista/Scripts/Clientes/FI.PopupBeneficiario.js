@@ -164,9 +164,9 @@ function povoarLista() {
     if (jsonObj == '0') {
         jsonObj = null;
     }
-        for (var i = 0; i < obj.length; i++) {
+    for (var i = 0; i < jsonObj.length; i++) {
             quantItens++;
-            var benef = obj[i];
+        var benef = jsonObj[i];
             var cpf = benef.CPF;
             var nome = benef.Nome;
 
