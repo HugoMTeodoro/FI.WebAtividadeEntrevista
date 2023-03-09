@@ -8,14 +8,7 @@ $(document).ready(function () {
 
 })
 function submitManual() {
-    var jsonObj;
-    var Obj = $("#ConteudoPopup").val();
-    if (typeof Obj === 'undefined' || Obj === null || Obj == null || Obj.length ==0) {
-        jsonObj = null;
-    } else {
-        jsonObj = JSON.parse(Obj);
-    }
-    
+        var jsonObj = JSON.parse($("#ConteudoPopup").val());
         var cliente = {
             Nome: $("#Nome").val(),
             Sobrenome: $("#Sobrenome").val(),

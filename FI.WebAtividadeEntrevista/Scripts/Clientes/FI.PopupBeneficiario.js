@@ -1,9 +1,9 @@
-﻿
+﻿var beneficiarios = [];
 $(document).ready(function () {
     quantItens = $("#QuantidadeBeneficiarios").val()
     $('.CPF').inputmask("999.999.999-99");
     povoarLista();
-
+    
 });
 
 function ExcluirBeneficiario(index) {
@@ -38,16 +38,17 @@ function AdicionarBeneficiario() {
         </div>
     </div>
 </div>`;
-
-    var beneficiarios = [];
+    var beneficiario = { CPF: cpf, Nome: nome };
+    beneficiarios.push(beneficiario);
+    
     // Percorra todos os elementos de CPF e nome e adicione-os a um objeto BeneficiarioModel
-    $('.GridCPFBeneficiario').each(function (index, element) {
+/*    $('.GridCPFBeneficiario').each(function (index, element) {
         var cpfrequest = $(element).val();
         cpfrequest = cpfrequest.replace(/\D/g, '');
         var nome = $(`.GridNomeBeneficiario:eq(${index})`).val();
-        var beneficiario = { CPF: cpfrequest, Nome: nome };
-        beneficiarios.push(beneficiario);
-    });
+        
+        
+    });*/
 
     $.ajax({
         url: urlPostBeneficiario,
@@ -68,13 +69,11 @@ function AdicionarBeneficiario() {
             },
         success:
             function (r) {
-                povoarListaBeneficiarios();
-                quantItens++;
                 $('#BeneficiariosGrid').append(novoCampo);
-                resetarBeneficiario();
+                quantItens++;
                 ModalDialog("Sucesso!", r)
-                
-                
+                resetarBeneficiario();
+                povoarListaBeneficiarios();
             }
     });
 
@@ -161,16 +160,9 @@ function povoarListaBeneficiarios() {
     $("#ConteudoPopup").val(objeto_serializado);
 }
 function povoarLista() {
-    var obj;
-        let conteudo = $("#ConteudoPopup").val();
-    if (conteudo == null) {
-        obj = JSON.stringify({});
-    }  
-    try {
-        obj = JSON.parse(conteudo);
-    } catch (e) {
-        console.log("Error parsing JSON: " + e);
-    }
+    let conteudo = $("#ConteudoPopup").val();
+    if (conteudo != "0") {
+        var obj = JSON.parse(conteudo);
         for (var i = 0; i < obj.length; i++) {
             quantItens++;
             var benef = obj[i];
@@ -205,7 +197,7 @@ function povoarLista() {
 
             // adiciona o novo conjunto de campos ao formulário
             $('#BeneficiariosGrid').append(novoCampo);
-        //}
+        }
     }
 }
 function editarBeneficiario(index) {
