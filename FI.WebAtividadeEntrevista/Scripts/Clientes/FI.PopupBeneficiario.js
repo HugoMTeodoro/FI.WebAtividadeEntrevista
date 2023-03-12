@@ -39,8 +39,8 @@ function AdicionarBeneficiario() {
         </div>
     </div>
 </div>`;
-    var beneficiario = { CPF: cpf, Nome: nome };
-    beneficiarios.push(beneficiario);
+    var beneficiario = { CPF: cpf.replace(/[.-]/g, ""), Nome: nome };
+   
     
     // Percorra todos os elementos de CPF e nome e adicione-os a um objeto BeneficiarioModel
 /*    $('.GridCPFBeneficiario').each(function (index, element) {
@@ -57,7 +57,7 @@ function AdicionarBeneficiario() {
         data: {
             model: {
                 "Nome": nome,
-                "CPF": $("#CPFBeneficiario").inputmask("unmaskedvalue")
+                "CPF": $("#CPFBeneficiario").val().replace(/[.-]/g, "")
             },
             "Beneficiarios": beneficiarios
         },
@@ -70,6 +70,7 @@ function AdicionarBeneficiario() {
             },
         success:
             function (r) {
+                beneficiarios.push(beneficiario);
                 $('#BeneficiariosGrid').append(novoCampo);
                 quantItens++;
                 ModalDialog("Sucesso!", r)
@@ -129,7 +130,7 @@ function resetarBeneficiario() {
 function povoarListaBeneficiarios() {
     var beneficiarios = [];
     $('.GridCPFBeneficiario').each(function (index, element) {
-        var cpfrequest = $(element).val();
+        var cpfrequest = $(element).val().inputmask("unmaskedvalue");
         cpfrequest = cpfrequest.replace(/\D/g, '');
         var nome = $(`.GridNomeBeneficiario:eq(${index})`).val();
         var beneficiario = { CPF: cpfrequest, Nome: nome };
