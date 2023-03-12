@@ -17,12 +17,12 @@ namespace WebAtividadeEntrevista.Controllers
         }
 
         [HttpPost]
-        public JsonResult Validar(BeneficiarioModel model, List<BeneficiarioModel> Beneficiarios)
+        public JsonResult Validar(BeneficiariosValidateModel model)
         {
             BoBeneficiario bo = new BoBeneficiario();
-            if (Beneficiarios != null)
+            if (model.Beneficiarios != null)
             {
-                List<Beneficiario> beneficiariosEntidade = ConverterModel(Beneficiarios);
+                List<Beneficiario> beneficiariosEntidade = ConverterModel(model.Beneficiarios);
                 if (bo.VerificarInconsistencia(new Beneficiario { CPF = model.CPF, Nome = model.Nome }, beneficiariosEntidade))
                 {
                     ModelState.AddModelError("Beneficiário", ConstantesMensagensBeneficiario.s_BeneficiarioDuplicado);
