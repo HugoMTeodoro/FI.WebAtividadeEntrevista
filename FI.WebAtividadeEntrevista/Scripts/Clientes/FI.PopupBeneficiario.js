@@ -10,10 +10,17 @@ $(document).ready(function () {
 });
 
 function ExcluirBeneficiario(index) {
+    let cpf = $("#CPFBeneficiario" +index).val();
+    let nome = $("#NomeBeneficiario" + index).val();
+    var beneficiarioDeletado = { CPF: cpf.replace(/[.-]/g, ""), Nome: nome };
+    beneficiarios = beneficiarios.filter(function (objeto) {
+        return JSON.stringify(objeto) !== JSON.stringify(beneficiarioDeletado);
+    });
     $("#Beneficiario" + index).fadeOut(500, function () {
         $(this).remove();
         povoarListaBeneficiarios();
     });
+    
 }
 function AdicionarBeneficiario() {
 
@@ -88,7 +95,7 @@ function EditarBeneficiarioServidor(index, cpfAnterior, nomeAnterior) {
 
     let cpf = $("#CPFBeneficiario" + index).val();
     let nome = $("#NomeBeneficiario" + index).val();
-    var beneficiarioConf = { CPF: cpf, Nome: nome };
+    var beneficiarioConf = { CPF: cpf.replace(/\D/g, ''), Nome: nome };
     var beneficiariosAux = [];
     // Percorra todos os elementos de CPF e nome e adicione-os a um objeto BeneficiarioModel
     $('.GridCPFBeneficiario').each(function (index, element) {
@@ -98,7 +105,7 @@ function EditarBeneficiarioServidor(index, cpfAnterior, nomeAnterior) {
         var beneficiario = { CPF: cpf, Nome: nome };
         beneficiariosAux.push(beneficiario);
     });
-    var beneficiariosVal = beneficiarios.filter(function (objeto) {
+    var beneficiariosVal = beneficiariosAux.filter(function (objeto) {
         return JSON.stringify(objeto) !== JSON.stringify(beneficiarioConf);
     });
     $.ajax({

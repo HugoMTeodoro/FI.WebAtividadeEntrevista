@@ -41,7 +41,7 @@ namespace WebAtividadeEntrevista.Controllers
 
 
 
-            return Json("Beneficiário Inserido com Sucesso");
+            return Json("Beneficiário Atualizado com Sucesso");
         }
         
 
