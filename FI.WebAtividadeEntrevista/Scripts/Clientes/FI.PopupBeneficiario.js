@@ -3,7 +3,7 @@
 var cpfAnterior;
 var nomeAnterior;
 $(document).ready(function () {
-    quantItens = $("#QuantidadeBeneficiarios").val()
+    quantItens = $("#QuantidadeBeneficiarios").val();
     $('.CPF').inputmask("999.999.999-99");
     povoarLista();
 
@@ -12,8 +12,8 @@ $(document).ready(function () {
 function ExcluirBeneficiario(index) {
     $("#Beneficiario" + index).fadeOut(500, function () {
         $(this).remove();
+        povoarListaBeneficiarios();
     });
-    povoarListaBeneficiarios();
 }
 function AdicionarBeneficiario() {
 
@@ -124,8 +124,6 @@ function EditarBeneficiarioServidor(index, cpfAnterior, nomeAnterior) {
         success:
             function (r) {
                 ModalDialog("Sucesso!", r)
-                $('#CPFBeneficiario').val(cpf);
-                $('#NomeBeneficiario').val(nome);
                 povoarListaBeneficiarios();
             }
     });
@@ -137,15 +135,15 @@ function resetarBeneficiario() {
     $('#NomeBeneficiario').val('');
 }
 function povoarListaBeneficiarios() {
-    var beneficiarios = [];
+    var beneficiariosAux = [];
     $('.GridCPFBeneficiario').each(function (index, element) {
-        var cpfrequest = $(element).val().inputmask("unmaskedvalue");
+        var cpfrequest = $(element).val().replace(/\D/g, '');
         cpfrequest = cpfrequest.replace(/\D/g, '');
         var nome = $(`.GridNomeBeneficiario:eq(${index})`).val();
         var beneficiario = { CPF: cpfrequest, Nome: nome };
-        beneficiarios.push(beneficiario);
+        beneficiariosAux.push(beneficiario);
     });
-    var objeto_serializado = JSON.stringify(beneficiarios);
+    var objeto_serializado = JSON.stringify(beneficiariosAux);
     $("#ConteudoPopup").val(objeto_serializado);
 }
 function povoarLista() {

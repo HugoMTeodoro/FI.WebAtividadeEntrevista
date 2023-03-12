@@ -69,21 +69,14 @@ namespace WebAtividadeEntrevista.Controllers
             BoCliente bo = new BoCliente();
             BoBeneficiario boBen = new BoBeneficiario();
             bool haRepeticoes = false;
-            List<Beneficiario> beneficiariosBd = boBen.Consultar(model.Id);
-            foreach (Beneficiario b in beneficiariosBd)
-            {
-                BeneficiarioModel benefFront = model.Beneficiarios.Where(x=> x.CPF==b.CPF && x.IDCLIENTE== model.Id).FirstOrDefault();
-                if (benefFront == null)
-                {
-                    boBen.Excluir(b.Id);
-                }
-            }
             if (model.Beneficiarios != null)
                 haRepeticoes = model.Beneficiarios.GroupBy(p => p.CPF).Any(g => g.Count() > 1);
             if (haRepeticoes)
             {
                 ModelState.AddModelError("Beneficiário", ConstantesMensagensBeneficiario.s_BeneficiarioDuplicado);
             }
+
+
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -109,6 +102,22 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = model.Telefone,
                     CPF = model.CPF
                 });
+                List<Beneficiario> beneficiariosBd = boBen.Consultar(model.Id);
+                foreach (Beneficiario b in beneficiariosBd)
+                {
+                    if (model.Beneficiarios != null)
+                    {
+                        BeneficiarioModel benefFront = model.Beneficiarios.Where(x => x.CPF == b.CPF && x.IDCLIENTE == model.Id).FirstOrDefault();
+                        if (benefFront == null)
+                        {
+                            boBen.Excluir(b.Id);
+                        }
+                    }
+                    else
+                    {
+                        boBen.Excluir(b.Id);
+                    }
+                }
                 if (model.Beneficiarios != null)
                 {
                     foreach (BeneficiarioModel ben in model.Beneficiarios)
@@ -117,7 +126,7 @@ namespace WebAtividadeEntrevista.Controllers
                         boBen.Alterar(new Beneficiario { CPF = ben.CPF, IDCLIENTE = model.Id, Nome = ben.Nome });
                     }
                 }
-                
+
                 return Json("Cadastro alterado com sucesso");
             }
         }
