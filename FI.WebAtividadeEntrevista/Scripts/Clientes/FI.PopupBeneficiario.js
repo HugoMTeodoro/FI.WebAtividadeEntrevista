@@ -14,7 +14,7 @@ function ExcluirBeneficiario(index) {
     let nome = $("#NomeBeneficiario" + index).val();
     var beneficiarioDeletado = { CPF: cpf.replace(/[.-]/g, ""), Nome: nome };
     beneficiarios = beneficiarios.filter(function (objeto) {
-        return JSON.stringify(objeto) !== JSON.stringify(beneficiarioDeletado);
+        return objeto.cpf !== beneficiarioDeletado.cpf;
     });
     $("#Beneficiario" + index).fadeOut(500, function () {
         $(this).remove();
@@ -95,27 +95,32 @@ function EditarBeneficiarioServidor(index, cpfAnterior, nomeAnterior) {
 
     let cpf = $("#CPFBeneficiario" + index).val();
     let nome = $("#NomeBeneficiario" + index).val();
-    var beneficiarioConf = { CPF: cpf.replace(/\D/g, ''), Nome: nome };
+    var beneficiarioConf = { CPF: cpfAnterior, Nome: nomeAnterior };
     var beneficiariosAux = [];
     // Percorra todos os elementos de CPF e nome e adicione-os a um objeto BeneficiarioModel
     $('.GridCPFBeneficiario').each(function (index, element) {
         var cpfrequest = $(element).val();
         cpfrequest = cpfrequest.replace(/\D/g, '');
         var nome = $(`.GridNomeBeneficiario:eq(${index})`).val();
-        var beneficiario = { CPF: cpf, Nome: nome };
+        var beneficiario = { CPF: cpfrequest, Nome: nome };
         beneficiariosAux.push(beneficiario);
     });
-    var beneficiariosVal = beneficiariosAux.filter(function (objeto) {
+    /*var beneficiariosVal = beneficiariosAux.filter(function (objeto) {
         return JSON.stringify(objeto) !== JSON.stringify(beneficiarioConf);
-    });
+    });*/
+    if (cpf.replace(/\D/g, '') == cpfAnterior) {
+        beneficiariosAux = beneficiarios.filter(function (objeto) {
+            return objeto.CPF != cpf.replace(/\D/g, '');
+        });
+    }
     $.ajax({
         url: urlPostBeneficiario,
         method: "POST",
         data: {
             model: {
                 "Nome": nome,
-                "CPF": $("#CPFBeneficiario" + index).inputmask("unmaskedvalue"),
-                "Beneficiarios": beneficiariosVal
+                "CPF": $("#CPFBeneficiario" + index).val().replace(/\D/g, ''),
+                "Beneficiarios": beneficiariosAux
             }
         },
         error:
