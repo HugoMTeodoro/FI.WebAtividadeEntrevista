@@ -50,16 +50,17 @@ function AdicionarBeneficiario() {
     </div>
 </div>`;
     var beneficiarioAux = { CPF: cpf.replace(/[.-]/g, ""), Nome: nome };
-
+    var beneficiariosAtual=[];
 
     // Percorra todos os elementos de CPF e nome e adicione-os a um objeto BeneficiarioModel
-    /*    $('.GridCPFBeneficiario').each(function (index, element) {
+        $('.GridCPFBeneficiario').each(function (index, element) {
             var cpfrequest = $(element).val();
             cpfrequest = cpfrequest.replace(/\D/g, '');
             var nome = $(`.GridNomeBeneficiario:eq(${index})`).val();
+            var beneficiarioList = { CPF: cpfrequest, Nome: nome };
+            beneficiariosAtual.push(beneficiarioList);
             
-            
-        });*/
+        });
 
     $.ajax({
         url: urlPostBeneficiario,
@@ -68,7 +69,7 @@ function AdicionarBeneficiario() {
             model: {
                 "Nome": nome,
                 "CPF": $("#CPFBeneficiario").val().replace(/[.-]/g, ""),
-                "Beneficiarios": beneficiarios
+                "Beneficiarios": beneficiariosAtual
             }
         }),
         contentType: 'application/json; charset=utf-8',
