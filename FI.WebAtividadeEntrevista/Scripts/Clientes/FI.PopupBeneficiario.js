@@ -108,17 +108,6 @@ function EditarBeneficiarioServidor(index, cpfAnterior, nomeAnterior) {
     let nome = $("#NomeBeneficiario" + index).val();
     var beneficiarioConf = { CPF: cpfAnterior, Nome: nomeAnterior };
     var beneficiariosAux = [];
-    // Percorra todos os elementos de CPF e nome e adicione-os a um objeto BeneficiarioModel
-    /*$('.GridCPFBeneficiario').each(function (index, element) {
-        var cpfrequest = $(element).val();
-        cpfrequest = cpfrequest.replace(/\D/g, '');
-        var nome = $(`.GridNomeBeneficiario:eq(${index})`).val();
-        var beneficiario = { CPF: cpfrequest, Nome: nome };
-        beneficiariosAux.push(beneficiario);
-    });*/
-    /*var beneficiariosVal = beneficiariosAux.filter(function (objeto) {
-        return JSON.stringify(objeto) !== JSON.stringify(beneficiarioConf);
-    });*/
     beneficiariosAux = beneficiarios;
     if (cpf.replace(/\D/g, '') == cpfAnterior) {
         beneficiariosAux = beneficiarios.filter(function (objeto) {
