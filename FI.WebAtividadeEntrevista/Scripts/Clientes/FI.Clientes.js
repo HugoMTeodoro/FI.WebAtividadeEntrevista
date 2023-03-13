@@ -40,6 +40,7 @@ function submitManual() {
                 ModalDialog("Sucesso!", r)
 
                 $("#formCadastro")[0].reset();
+                limparGridBeneficiarios();
             }
         });
     

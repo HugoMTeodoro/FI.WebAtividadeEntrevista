@@ -22,6 +22,16 @@ function ExcluirBeneficiario(index) {
     });
     
 }
+
+function limparGridBeneficiarios() {
+    for (var i = 0; i < quantItens; i++) {
+        $("#Beneficiario" + i).fadeOut(500, function () {
+            $(this).remove();
+            povoarListaBeneficiarios();
+        });
+    }
+}
+
 function AdicionarBeneficiario() {
 
 
